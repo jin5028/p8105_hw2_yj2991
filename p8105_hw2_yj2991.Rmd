@@ -35,10 +35,10 @@ subway_data = read_csv("data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv") |> 
 ```
 
 ## summary of the data
-This NYC transit dataset contains information about NYC subway stations and their entrances and exits. The variables include the subway line, station name, station latitude and longitude, routes served, entrance type, whether entry is allowed, whether vending is available, and ADA compliance. I selected the variables which are needed and converted the entry variable from character values (YES and NO) to a logical variable (TRUE and FALSE). The resulting dataset has 1868 rows and 19 columns. These data are not fully tidy because the routes served by each station are stored in multiple variables (route1 through route11) rather than having one route per observation.
+This NYC transit dataset contains information about NYC subway stations and their entrances and exits. The variables include the subway line, station name, station latitude and longitude, routes served, entrance type, whether entry is allowed, whether vending is available, and ADA compliance. I selected the variables which are needed and converted the entry variable from character values (YES and NO) to a logical variable (TRUE and FALSE). The resulting dataset has 1868 rows and 19 columns. These data are not tidy because the routes served by each station are stored in multiple variables rather than having one route per observation. For example, 36th St serves both the N and R trains, which are stored in separate variables (route1 and route2) rather than as separate observations.
 
 ## answers of the questions
-### distinct stations
+### distinct stations (only keep the first row of each distinct line and station name)
 ```{r}
 subway_data |> 
   distinct(line, station_name) |> 
@@ -65,4 +65,36 @@ subway_data |>
 ```
 Among station entrances and exits without vending, approximately 37.7% allow entrance.
 
+## Reformat Route Variables
+```{r}
+subway_routes =
+  subway_data |>
+  mutate(
+    across(starts_with("route"), as.character)
+  ) |>
+  pivot_longer(
+    cols = starts_with("route"),
+    names_to = "route_number",
+    values_to = "route_name",
+    values_drop_na = TRUE
+  ) |>
+  filter(route_name != "")
+```
 
+## Stations Serving the A Train
+```{r}
+subway_routes |> 
+  filter(route_name == "A") |> 
+  distinct(line, station_name) |> 
+  nrow()
+```
+There are 60 distinct stations that serve the A train.
+
+## ADA-Compliant A Train Stations
+```{r}
+subway_routes |> 
+  filter(route_name == "A", ada == TRUE) |> 
+  distinct(line, station_name) |> 
+  nrow()
+```
+17 are ADA compliant

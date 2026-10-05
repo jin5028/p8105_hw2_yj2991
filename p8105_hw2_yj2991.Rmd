@@ -98,3 +98,23 @@ subway_routes |>
   nrow()
 ```
 17 are ADA compliant
+
+# Problem 2
+clean the data Mr. Trash Wheel
+```{r}
+library(readxl)
+
+mr_trash_wheel =
+  read_excel(
+    "data/202509 Trash Wheel Collection Data.xlsx",
+    sheet = "Mr. Trash Wheel",
+    range = "A3:N709"
+  ) |>
+  janitor::clean_names() |>
+  filter(!is.na(dumpster)) |>
+  mutate(
+    sports_balls = as.integer(round(sports_balls)),
+    trash_wheel = "Mr. Trash Wheel"
+  )
+```
+

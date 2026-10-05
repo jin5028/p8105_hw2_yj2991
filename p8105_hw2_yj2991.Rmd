@@ -5,4 +5,32 @@ date: "2026-10-05"
 output: github_document
 ---
 
+load necessary libraries
+```{r}
+library(tidyverse) 
+library(janitor)
+```
+
+# Problem 1
+```{r}
+subway_data = read_csv("data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv") |>     clean_names() |> 
+  select(
+    line, 
+    station_name, 
+    station_latitude, 
+    station_longitude, 
+    starts_with("route"), 
+    entrance_type, 
+    entry, 
+    vending, 
+    ada
+  ) |> 
+  mutate(
+    entry = case_match(
+      entry, 
+      "YES" ~ TRUE, 
+      "NO" ~ FALSE 
+    ) 
+  )
+```
 

@@ -108,11 +108,12 @@ mr_trash_wheel =
   read_excel(
     "data/202509 Trash Wheel Collection Data.xlsx",
     sheet = "Mr. Trash Wheel",
-    range = "A3:N709"
+    range = "A2:N709"
   ) |>
   janitor::clean_names() |>
   filter(!is.na(dumpster)) |>
   mutate(
+    year = as.integer(year),
     sports_balls = as.integer(round(sports_balls)),
     trash_wheel = "Mr. Trash Wheel"
   )
@@ -129,6 +130,7 @@ professor_trash_wheel =
   janitor::clean_names() |>
   filter(!is.na(dumpster)) |>
   mutate(
+    year = as.integer(year),
     trash_wheel = "Professor Trash Wheel"
   )
 ```
@@ -145,6 +147,16 @@ gwynnda_trash_wheel =
   filter(!is.na(dumpster)) |>
   mutate(
     trash_wheel = "Gwynnda"
+  )
+```
+
+## Combine the datasets
+```{r}
+trash_wheel =
+  bind_rows(
+    mr_trash_wheel,
+    professor_trash_wheel,
+    gwynnda_trash_wheel
   )
 ```
 

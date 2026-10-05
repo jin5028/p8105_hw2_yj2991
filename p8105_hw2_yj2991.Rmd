@@ -35,5 +35,34 @@ subway_data = read_csv("data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv") |> 
 ```
 
 ## summary of the data
-This NYC transit dataset contains information about NYC subway stations and their entrances and exits. The variables include the subway line, station name, station latitude and longitude, routes served, entrance type, whether entry is allowed, whether vending is available, and ADA compliance. I selected the variables and converted the entry variable from character values (YES and NO) to a logical variable (TRUE and FALSE). The resulting dataset has 1868 rows and 19 columns. These data are not fully tidy because the routes served by each station are stored in multiple variables (route1 through route11) rather than having one route per observation.
+This NYC transit dataset contains information about NYC subway stations and their entrances and exits. The variables include the subway line, station name, station latitude and longitude, routes served, entrance type, whether entry is allowed, whether vending is available, and ADA compliance. I selected the variables which are needed and converted the entry variable from character values (YES and NO) to a logical variable (TRUE and FALSE). The resulting dataset has 1868 rows and 19 columns. These data are not fully tidy because the routes served by each station are stored in multiple variables (route1 through route11) rather than having one route per observation.
+
+## answers of the questions
+### distinct stations
+```{r}
+subway_data |> 
+  distinct(line, station_name) |> 
+  nrow()
+```
+There are 465 distinct stations.
+
+### ADA Compliant Stations
+```{r}
+subway_data |> 
+  filter(ada == TRUE) |> 
+  distinct(line, station_name) |> 
+  nrow()
+```
+There are 84 ADA-compliant stations.
+
+### Entrances/exits Without Vending That Allow Entrance
+```{r}
+subway_data |> 
+  filter(vending == "NO") |> 
+  summarize( 
+    proportion = mean(entry, na.rm = TRUE) 
+  )
+```
+Among station entrances and exits without vending, approximately 37.7% allow entrance.
+
 

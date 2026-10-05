@@ -186,7 +186,7 @@ gwynnda_trash_wheel |>
 ```
 Gwynnda collected a total of 18,120 cigarette butts in June 2022
 
-## Problem 3
+# Problem 3
 ```{r}
 baseline =
   read_csv(
@@ -195,12 +195,12 @@ baseline =
     na = "."
   ) |>
   rename(
-    study_id = `Unnamed: 0`,
-    age = `Age at the study baseline`,
-    sex = `1 = Male, 0 = Female`,
-    education = `Years of education`,
-    apoe4 = `1 = APOE4 carrier, 0 = APOE4 non-carrier`,
-    mci_onset_age = `Age at the onset of MCI; missing if a subject remains MCI free during the follow-up period`
+    study_id = ID,
+    age = `Current Age`,
+    sex = Sex,
+    education = Education,
+    apoe4 = apoe4,
+    mci_onset_age = `Age at onset`
   ) |>
   mutate(
     study_id = as.integer(study_id),
@@ -223,3 +223,9 @@ baseline =
   )
 ```
 
+## How many participants were recruited
+```{r}
+baseline |>
+  nrow()
+```
+479 participants are recruited.

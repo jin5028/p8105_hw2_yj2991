@@ -1,0 +1,8 @@
+---
+title: "hw2"
+author: "Yiran Jin"
+date: "2026-10-05"
+output: github_document
+---
+
+

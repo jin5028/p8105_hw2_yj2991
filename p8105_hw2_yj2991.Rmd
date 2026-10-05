@@ -6,7 +6,7 @@ output: github_document
 ---
 
 load necessary libraries
-```{r}
+```{r,message=FALSE,warning=FALSE}
 library(tidyverse) 
 library(janitor)
 ```
@@ -141,7 +141,7 @@ gwynnda_trash_wheel =
   read_excel(
     "data/202509 Trash Wheel Collection Data.xlsx",
     sheet = "Gwynns Falls Trash Wheel",
-    range = "A2:L350"
+    range = "A2:L351"
   ) |>
   janitor::clean_names() |>
   filter(!is.na(dumpster)) |>
@@ -158,6 +158,7 @@ trash_wheel =
     professor_trash_wheel,
     gwynnda_trash_wheel
   )
+dim(trash_wheel)
 ```
 
 ## Summary of the data
@@ -184,3 +185,41 @@ gwynnda_trash_wheel |>
   )
 ```
 Gwynnda collected a total of 18,120 cigarette butts in June 2022
+
+## Problem 3
+```{r}
+baseline =
+  read_csv(
+    "data/MCI_baseline.csv",
+    skip = 1,
+    na = "."
+  ) |>
+  rename(
+    study_id = `Unnamed: 0`,
+    age = `Age at the study baseline`,
+    sex = `1 = Male, 0 = Female`,
+    education = `Years of education`,
+    apoe4 = `1 = APOE4 carrier, 0 = APOE4 non-carrier`,
+    mci_onset_age = `Age at the onset of MCI; missing if a subject remains MCI free during the follow-up period`
+  ) |>
+  mutate(
+    study_id = as.integer(study_id),
+    age = as.numeric(age),
+    sex = case_match(
+      sex,
+      1 ~ "Male",
+      0 ~ "Female"
+    ),
+    apoe4 = case_match(
+      apoe4,
+      1 ~ "Carrier",
+      0 ~ "Non-carrier"
+    ),
+    education = as.numeric(education),
+    mci_onset_age = as.numeric(mci_onset_age)
+  ) |>
+  filter(
+    is.na(mci_onset_age) | mci_onset_age > age
+  )
+```
+

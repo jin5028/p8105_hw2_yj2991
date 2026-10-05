@@ -100,7 +100,7 @@ subway_routes |>
 17 are ADA compliant
 
 # Problem 2
-clean the data Mr. Trash Wheel
+## clean the data--Mr. Trash Wheel
 ```{r}
 library(readxl)
 
@@ -118,3 +118,19 @@ mr_trash_wheel =
   )
 ```
 
+## clean the data--Professor Trash Wheel
+```{r}
+professor_trash_wheel =
+  read_excel(
+    "data/202509 Trash Wheel Collection Data.xlsx",
+    sheet = "Professor Trash Wheel",
+    range = "A2:L134"
+  ) |>
+  janitor::clean_names() |>
+  filter(!is.na(dumpster)) |>
+  mutate(
+    trash_wheel = "Professor Trash Wheel"
+  )
+```
+
+## clean the data--Gwynnda

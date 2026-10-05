@@ -134,3 +134,17 @@ professor_trash_wheel =
 ```
 
 ## clean the data--Gwynnda
+```{r}
+gwynnda_trash_wheel =
+  read_excel(
+    "data/202509 Trash Wheel Collection Data.xlsx",
+    sheet = "Gwynns Falls Trash Wheel",
+    range = "A2:L350"
+  ) |>
+  janitor::clean_names() |>
+  filter(!is.na(dumpster)) |>
+  mutate(
+    trash_wheel = "Gwynnda"
+  )
+```
+

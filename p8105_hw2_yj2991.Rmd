@@ -160,3 +160,7 @@ trash_wheel =
   )
 ```
 
+## Summary of the data
+The Trash Wheel dataset contains information on dumpsters collected by three trash wheels: Mr. Trash Wheel, Professor Trash Wheel, and Gwynnda. Key variables include the dumpster number, month, year, date, weight and volume of trash collected, and counts of different types of trash such as plastic bottles, polystyrene, cigarette butts, plastic bags, and wrappers. I cleaned each dataset by selecting the appropriate worksheet and data range, removing rows that did not contain dumpster-specific observations, and using reasonable variable names. For Mr. Trash Wheel, I also rounded the number of sports balls to the nearest integer and converted it to an integer variable. I changed 'years' column to integer for each dataset in order to combine three datasets. Finally, I added a variable identifying the trash wheel and combined the three datasets into one tidy dataset. The resulting dataset contains `r nrow(trash_wheel)` observations.
+
+## 

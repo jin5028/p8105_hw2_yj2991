@@ -344,5 +344,4 @@ write_csv(
   "data/mci_combined.csv"
 )
 ```
-
 8 participants only in the baseline dataset, 16 only in the amyloid dataset, and 471 participants appearing in both datasets

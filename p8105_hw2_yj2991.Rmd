@@ -229,3 +229,120 @@ baseline |>
   nrow()
 ```
 479 participants are recruited.
+
+## How many develop MCI
+```{r}
+baseline |>
+  summarize(
+    n_mci = sum(!is.na(mci_onset_age))
+  )
+```
+93 developed MCI
+
+## Average baseline age
+```{r}
+baseline |>
+  summarize(
+    mean_age = mean(age, na.rm = TRUE)
+  )
+```
+Average baseline age is 65 years.
+
+## Proportion of women who are APOE4 carriers
+```{r}
+baseline |>
+  filter(sex == "Female") |>
+  summarize(
+    proportion = mean(apoe4 == "Carrier")
+  )
+```
+
+Approximately 30.0% of women were APOE4 carriers
+
+
+## load the data of amyloid
+```{r}
+amyloid =
+  read_csv(
+    "data/mci_amyloid.csv",
+    skip = 1,
+    na = "NA"
+  ) |>
+  set_names(
+    "study_id",
+    "baseline",
+    "time_2",
+    "time_4",
+    "time_6",
+    "time_8"
+  ) |>
+  mutate(
+    study_id = as.integer(study_id),
+    across(
+      c(baseline, time_2, time_4, time_6, time_8),
+      as.numeric
+    )
+  )
+
+amyloid_tidy =
+  amyloid |>
+  pivot_longer(
+    cols = -study_id,
+    names_to = "visit",
+    values_to = "amyloid_42_40"
+  ) |>
+  mutate(
+    visit = case_match(
+      visit,
+      "baseline" ~ 0,
+      "time_2" ~ 2,
+      "time_4" ~ 4,
+      "time_6" ~ 6,
+      "time_8" ~ 8
+    )
+  )
+```
+
+The longitudinal biomarker dataset contains amyloid 42/40 ratio measurements at baseline and at 2-, 4-, 6-, and 8-year follow-up visits. I imported the data using read_csv() and skipped the first row because it contains descriptive labels rather than participant-level data. I also specified "NA" as a missing-value code. Because the original column names were not informative after import, I assigned meaningful names based on the structure of the dataset and converted the study ID and biomarker measurements to numeric variables. The original data were in wide format, with a separate column for each visit. I used pivot_longer() to create a tidy longitudinal dataset in which each row represents one participant at one visit and amyloid contains the corresponding biomarker measurement. Missing measurements remain as NA.
+
+## Check whether some participants appear in only the baseline or amyloid datasets
+```{r}
+# Participants only in the baseline dataset
+baseline_only =
+  baseline |>
+  anti_join(amyloid_tidy, by = "study_id") |>
+  distinct(study_id)
+
+baseline_only
+
+# Participants only in the amyloid dataset
+amyloid_only =
+  amyloid_tidy |>
+  anti_join(baseline, by = "study_id") |>
+  distinct(study_id)
+
+amyloid_only
+```
+
+## combine dataset and export
+```{r}
+# Combine datasets, retaining only participants in both
+mci_combined =
+  baseline |>
+  inner_join(amyloid_tidy, by = "study_id")
+
+# Describe the resulting dataset
+mci_combined |>
+  summarize(
+    n_participants = n_distinct(study_id),
+    n_observations = n()
+  )
+
+# Export as CSV
+write_csv(
+  mci_combined,
+  "data/mci_combined.csv"
+)
+```
+
+8 participants only in the baseline dataset, 12 only in the amyloid dataset, and 475 participants appearing in both datasets

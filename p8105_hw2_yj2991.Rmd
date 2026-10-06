@@ -303,7 +303,7 @@ amyloid_tidy =
   )
 ```
 
-The longitudinal biomarker dataset contains amyloid 42/40 ratio measurements at baseline and at 2-, 4-, 6-, and 8-year follow-up visits. I imported the data using read_csv() and skipped the first row because it contains descriptive labels rather than participant-level data. I also specified "NA" as a missing-value code. Because the original column names were not informative after import, I assigned meaningful names based on the structure of the dataset and converted the study ID and biomarker measurements to numeric variables. The original data were in wide format, with a separate column for each visit. I used pivot_longer() to create a tidy longitudinal dataset in which each row represents one participant at one visit and amyloid contains the corresponding biomarker measurement. Missing measurements remain as NA.
+The longitudinal biomarker dataset contains amyloid 42/40 ratio measurements at baseline and at 2, 4, 6, and 8-year follow-up visits. I imported the data using read_csv() and skipped the first row because it contains descriptive labels rather than participant-level data. I also specified "NA" as a missing-value code. Because the original column names were not informative after import, I assigned meaningful names based on the structure of the dataset and converted the study ID and biomarker measurements to numeric variables. The original data were in wide format, with a separate column for each visit. I used pivot_longer() to create a tidy longitudinal dataset in which each row represents one participant at one visit and amyloid 42/40 contains the corresponding biomarker measurement. Missing measurements remain as NA.
 
 ## Check whether some participants appear in only the baseline or amyloid datasets
 ```{r}
@@ -345,4 +345,4 @@ write_csv(
 )
 ```
 
-8 participants only in the baseline dataset, 12 only in the amyloid dataset, and 475 participants appearing in both datasets
+8 participants only in the baseline dataset, 16 only in the amyloid dataset, and 471 participants appearing in both datasets

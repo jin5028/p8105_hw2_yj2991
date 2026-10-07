@@ -1,5 +1,5 @@
 ---
-title: "hw2"
+title: "P8105 Homework 2"
 author: "Yiran Jin"
 date: "2026-10-05"
 output: github_document
@@ -106,9 +106,9 @@ library(readxl)
 
 mr_trash_wheel =
   read_excel(
-    "data/202509 Trash Wheel Collection Data.xlsx",
+    "data/202610 Trash Wheel Collection Data.xlsx",
     sheet = "Mr. Trash Wheel",
-    range = "A2:N709"
+    range = "A2:N742"
   ) |>
   janitor::clean_names() |>
   filter(!is.na(dumpster)) |>
@@ -123,9 +123,9 @@ mr_trash_wheel =
 ```{r}
 professor_trash_wheel =
   read_excel(
-    "data/202509 Trash Wheel Collection Data.xlsx",
+    "data/202610 Trash Wheel Collection Data.xlsx",
     sheet = "Professor Trash Wheel",
-    range = "A2:L134"
+    range = "A2:L137"
   ) |>
   janitor::clean_names() |>
   filter(!is.na(dumpster)) |>
@@ -139,9 +139,9 @@ professor_trash_wheel =
 ```{r}
 gwynnda_trash_wheel =
   read_excel(
-    "data/202509 Trash Wheel Collection Data.xlsx",
-    sheet = "Gwynns Falls Trash Wheel",
-    range = "A2:L351"
+    "data/202610 Trash Wheel Collection Data.xlsx",
+    sheet = "Gwynnda the Good Wheel of the W",
+    range = "A2:L394"
   ) |>
   janitor::clean_names() |>
   filter(!is.na(dumpster)) |>
@@ -152,6 +152,11 @@ gwynnda_trash_wheel =
 
 ## Combine the datasets
 ```{r}
+professor_trash_wheel =
+  professor_trash_wheel |>
+  mutate(
+    plastic_bottles = as.numeric(plastic_bottles)
+  )
 trash_wheel =
   bind_rows(
     mr_trash_wheel,
